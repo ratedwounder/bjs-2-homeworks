@@ -28,37 +28,37 @@ class PrintEditionItem {
 }
 
 class Magazine extends PrintEditionItem {
-    constructor(...args) {
-        super(...args); 
-        this.type = 'Magazine';
+    constructor(name, releaseDate, pagesCount) {
+        super(name, releaseDate, pagesCount);
+        this.type = 'magazine';
     }
 }
 
 class Book extends PrintEditionItem {
-    constructor(author, ...args) {
-        super(author, ...args);
+    constructor(author, name, releaseDate, pagesCount) {
+        super(name, releaseDate, pagesCount);
         this.type = 'book';
         this.author = author;
     }
 }
 
 class NovelBook extends Book {
-    constructor(...args) {
-        super(...args);
+    constructor(author, name, releaseDate, pagesCount) {
+        super(author, name, releaseDate, pagesCount);
         this.type = 'novel';
     }
 }
 
 class FantasticBook extends Book {
-    constructor(...args) {
-        super(...args);
+    constructor(author, name, releaseDate, pagesCount) {
+        super(author, name, releaseDate, pagesCount);
         this.type = 'fantastic';
     }
 }
 
 class DetectiveBook extends Book {
-    constructor(...args) {
-        super(...args);
+    constructor(author, name, releaseDate, pagesCount) {
+        super(author, name, releaseDate, pagesCount);
         this.type = 'detective';
     }
 }
