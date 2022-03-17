@@ -1,68 +1,74 @@
-//task 1
-
 function cachingDecoratorNew(func) {
-  let cache = [];
+  const cash = [];
 
-  function wrapper(...rest) {
-    let hash = rest.join(',');
-    let existResult = cache.filter(cacheRecord => cacheRecord.hash === hash);
-    if (existResult.length === 1) {
-      console.log('Из кэша: ' + existResult[0].value);
-      return 'Из кэша: ' + existResult[0].value;
+  function wrapper(...args) {
+    const hash = args.join(',');
+
+    const index = cash.findIndex((elem) => {
+      return hash === Object.keys(elem)[0];
+    })
+
+    if (index !== -1) {
+      console.log("Из кэша: " + cash[index][hash]);
+      return "Из кэша: " + cash[index][hash];
     } else {
-      let value = func.call(this, ...rest);
-      console.log('Вычисляем: ' + value);
-      if (cache.length < 5) {
-        cache.push({
-          hash,
-          value
-        });
-      } else {
-        cache.unshift({
-          hash,
-          value
-        });
-        cache.pop();
+      const result = func(...args);
+      cash.push({
+        [hash]: result
+      });
+
+      if (cash.length > 5) {
+        cash.shift();
       }
-      return 'Вычисляем: ' + value;
+
+      console.log("Вычисляем: " + result);
+      return "Вычисляем: " + result;
     }
   }
+
   return wrapper;
 }
 
-
-// task 2
 
 function debounceDecoratorNew(func, ms) {
-
   let timeout;
-  let repeatCall = false;
+  let flag = false;
 
-  function wrapper(...rest) {
-
-    if (!repeatCall) {
-      func.apply(this, ...rest);
-      repeatCall = true;
-      return;
-    }
-    clearTimeout(timeout)
+  function wrapper(...args) {
+    clearTimeout(timeout);
     timeout = setTimeout(() => {
-      repeatCall = false
-      func.apply(this, ...rest)
+      func(...args);
     }, ms)
+
+    if (flag === false) {
+      func(...args);
+      flag = true;
+    }
   }
-  return wrapper;
+
+  return wrapper
 }
 
 
-//task 3
+function debounceDecorator2(func, ms) {
+  let timeout;
+  let flag = false;
 
-function debounceDecorator2(debounceDecoratorNew) {
-  let count = 0;
+  function wrapper(...args) {
+    wrapper.history++;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, ms)
 
-  function wrapper(...rest) {
-    wrapper.history = count++;
-    return debounceDecoratorNew.call(this, ...rest);
+    if (flag === false) {
+      func(...args);
+      flag = true;
+    }
+    console.log(wrapper.history)
   }
-  return wrapper;
+
+  wrapper.history = 0;
+
+  return wrapper
 }
